@@ -1,0 +1,10 @@
+{
+    "target_symbols": [
+        "300454.SZ",
+        "688041.SS"
+    ],
+    "scheduler": {
+        "hour": 17,
+        "minute": 0
+    }
+} 
