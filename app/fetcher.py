@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 import logging
 from .db import StockDaily
 import pandas as pd
+import asyncio
+from functools import partial
 
 # 配置日志
 logging.basicConfig(
@@ -12,18 +14,21 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-def fetch_and_store(symbol: str, db: Session, start_date=None, end_date=None):
+async def fetch_and_store(symbol: str, db: Session, start_date=None, end_date=None):
     logger.info(f"开始获取股票 {symbol} 的数据")
     
-    # 默认抓取最近30天
+    # 默认抓取最近180天
     if not end_date:
-        end_date = datetime.now().date()
+        end_date = datetime.now().date() + timedelta(days=1)
     if not start_date:
         start_date = end_date - timedelta(days=180)
     
     logger.info(f"获取时间范围: {start_date} 到 {end_date}")
     
-    df = yf.download(symbol, start=start_date, end=end_date)
+    # 使用线程池执行 yfinance 下载操作
+    loop = asyncio.get_event_loop()
+    df = await loop.run_in_executor(None, partial(yf.download, symbol, start=start_date, end=end_date))
+    
     if df.empty:
         logger.warning(f"未找到股票 {symbol} 的数据")
         return {"status": "error", "message": "未找到数据", "count": 0}
@@ -33,7 +38,7 @@ def fetch_and_store(symbol: str, db: Session, start_date=None, end_date=None):
     for idx, row in df.iterrows():
         date = idx.date()
         # 检查是否已存在
-        exists = db.query(StockDaily).filter_by(symbol=symbol, date=date).first()
+        exists = db.query(StockDaily).filter_by(symbol=symbol, date=date).with_for_update().first()
         if exists:
             skipped += 1
             continue

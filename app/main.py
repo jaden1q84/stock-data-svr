@@ -54,22 +54,22 @@ def get_latest_stock(symbol: str, db: Session = Depends(get_db)):
     }
 
 @app.post("/stocks/{symbol}/fetch")
-def trigger_fetch(
+async def trigger_fetch(
     symbol: str,
     start: Optional[date] = Query(None),
     end: Optional[date] = Query(None),
     db: Session = Depends(get_db)
 ):
-    count = fetch_and_store(symbol, db, start, end)
+    result = await fetch_and_store(symbol, db, start, end)
     return {
         "symbol": symbol,
         "start_date": start,
         "end_date": end,
-        "records_added": count
+        "result": result
     }
 
 @app.post("/scheduler/trigger")
 async def trigger_scheduler():
     """手动触发定时任务，更新所有目标股票的数据"""
-    asyncio.create_task(asyncio.to_thread(scheduled_job))
-    return {"status": "success", "message": "定时任务已触发"} 
+    asyncio.create_task(scheduled_job())
+    return {"status": "success", "message": "定时任务已触发，正在后台执行"} 

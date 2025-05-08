@@ -31,5 +31,6 @@
     "scheduler": {
         "hour": 17,
         "minute": 0
-    }
+    },
+    "max_concurrent": 4
 } 
