@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.pool import StaticPool
 from typing import Generator
 
-DB_PATH = os.getenv("DB_PATH", "stock_data.db")
+DB_PATH = os.getenv("DB_PATH", "data/stock_data.db")
 DATABASE_URL = f"sqlite:///{DB_PATH}"
 
 engine = create_engine(

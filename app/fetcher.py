@@ -6,6 +6,12 @@ from .db import StockDaily
 import pandas as pd
 import asyncio
 from functools import partial
+import os
+
+# 设置 TzCache 位置到应用目录下的缓存文件夹
+cache_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'cache')
+os.makedirs(cache_dir, exist_ok=True)
+yf.set_tz_cache_location(cache_dir)
 
 # 配置日志
 logging.basicConfig(

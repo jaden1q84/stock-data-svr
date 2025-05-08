@@ -28,7 +28,7 @@ uvicorn app.main:app --reload
 ### 2. Docker 部署
 ```bash
 docker build -t stock-data-svr .
-docker run -d -p 8000:8000 --name stock-data-svr stock-data-svr
+docker run -d -p 8000:8000 -v stock-data:/app/data --name stock-data-svr stock-data-svr
 ```
 
 ## API 示例
