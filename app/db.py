@@ -26,7 +26,6 @@ class StockDaily(Base):
     low = Column(Float)
     close = Column(Float)
     volume = Column(Float)
-    adj_close = Column(Float)
 
 def get_db() -> Generator[Session, None, None]:
     db = SessionLocal()
