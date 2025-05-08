@@ -34,9 +34,28 @@ docker run -d -p 8000:8000 --name stock-data-svr stock-data-svr
 ## API 示例
 
 - 查询某只股票区间K线：
-  - `GET /stocks/AAPL?start=2023-01-01&end=2023-12-31`
+  - `GET /stocks/688041.SS?start=2025-05-01&end=2025-05-08`
 - 查询最新价格：
-  - `GET /stocks/AAPL/latest`
+  - `GET /stocks/688041.SS/latest`
+- 手动触发数据抓取：
+  - `POST /stocks/stocks/688041.SS/fetch`
+- 手动触发数据抓取（指定日期）：
+  - `POST /stocks/stocks/688041.SS/fetch?start=2025-01-01&end=2025-05-08`
+
+## 使用curl示例
+
+```bash
+# 查询股票K线数据
+curl "http://localhost:8000/stocks/688041.SS?start=2025-05-01&end=2025-05-08"
+
+# 查询最新价格
+curl "http://localhost:8000/stocks/688041.SS/latest"
+
+# 手动触发数据抓取指定股票最近30天的数据
+curl -X POST "http://localhost:8000/stocks/688041.SS/fetch"
+
+# 抓取指定股票特定日期范围的数据
+curl -X POST "http://localhost:8000/stocks/688041.SS/fetch?start=2025-01-01&end=2025-05-08"
 
 ## 配置
 - 目标股票列表可在 `app/scheduler.py` 的 `TARGET_SYMBOLS` 修改
