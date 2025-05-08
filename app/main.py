@@ -4,6 +4,7 @@ from typing import List, Optional
 from datetime import date
 from .db import init_db, get_db, StockDaily
 from .scheduler import start_scheduler
+from .fetcher import fetch_and_store
 
 app = FastAPI()
 
@@ -51,4 +52,19 @@ def get_latest_stock(symbol: str, db: Session = Depends(get_db)):
         "close": r.close,
         "volume": r.volume,
         "adj_close": r.adj_close
+    }
+
+@app.post("/stocks/{symbol}/fetch")
+def trigger_fetch(
+    symbol: str,
+    start: Optional[date] = Query(None),
+    end: Optional[date] = Query(None),
+    db: Session = Depends(get_db)
+):
+    count = fetch_and_store(symbol, db, start, end)
+    return {
+        "symbol": symbol,
+        "start_date": start,
+        "end_date": end,
+        "records_added": count
     } 
