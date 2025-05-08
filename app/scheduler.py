@@ -4,7 +4,7 @@ from .db import get_db
 from .fetcher import fetch_and_store
 
 # 目标股票列表，可根据需要修改
-TARGET_SYMBOLS = ['AAPL', 'MSFT', 'GOOG']
+TARGET_SYMBOLS = ['300454.SZ', '688041.SS']
 
 def scheduled_job():
     from .db import SessionLocal
