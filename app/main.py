@@ -3,8 +3,9 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 from datetime import date
 from .db import init_db, get_db, StockDaily
-from .scheduler import start_scheduler
+from .scheduler import start_scheduler, scheduled_job
 from .fetcher import fetch_and_store
+import asyncio
 
 app = FastAPI()
 
@@ -65,4 +66,10 @@ def trigger_fetch(
         "start_date": start,
         "end_date": end,
         "records_added": count
-    } 
+    }
+
+@app.post("/scheduler/trigger")
+async def trigger_scheduler():
+    """手动触发定时任务，更新所有目标股票的数据"""
+    asyncio.create_task(asyncio.to_thread(scheduled_job))
+    return {"status": "success", "message": "定时任务已触发"} 

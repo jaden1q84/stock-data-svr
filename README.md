@@ -41,6 +41,8 @@ docker run -d -p 8000:8000 --name stock-data-svr stock-data-svr
   - `POST /stocks/stocks/688041.SS/fetch`
 - 手动触发数据抓取（指定日期）：
   - `POST /stocks/stocks/688041.SS/fetch?start=2025-01-01&end=2025-05-08`
+- 手动触发定时任务（更新所有目标股票）：
+  - `POST /scheduler/trigger`
 
 ## 使用curl示例
 
@@ -56,6 +58,9 @@ curl -X POST "http://localhost:8000/stocks/688041.SS/fetch"
 
 # 抓取指定股票特定日期范围的数据
 curl -X POST "http://localhost:8000/stocks/688041.SS/fetch?start=2025-01-01&end=2025-05-08"
+
+# 手动触发定时任务，更新所有目标股票数据
+curl -X POST "http://localhost:8000/scheduler/trigger"
 
 ## 配置
 - 目标股票列表可在 `app/scheduler.py` 的 `TARGET_SYMBOLS` 修改

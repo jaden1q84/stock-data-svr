@@ -19,7 +19,7 @@ def fetch_and_store(symbol: str, db: Session, start_date=None, end_date=None):
     if not end_date:
         end_date = datetime.now().date()
     if not start_date:
-        start_date = end_date - timedelta(days=30)
+        start_date = end_date - timedelta(days=180)
     
     logger.info(f"获取时间范围: {start_date} 到 {end_date}")
     
