@@ -11,6 +11,7 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 COPY ./app ./app
 COPY ./config.json ./config.json
+COPY ./log_config.json ./log_config.json
 RUN mkdir -p ./data/cache && chmod 777 ./data/cache
 EXPOSE 8000
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"] 
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--log-config", "log_config.json"] 
