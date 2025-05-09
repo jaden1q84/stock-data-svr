@@ -25,15 +25,15 @@ async def fetch_and_store(symbol: str, db: Session, start_date=None, end_date=No
     
     # 默认抓取最近180天
     if not end_date:
-        end_date = datetime.now().date() + timedelta(days=1)
+        end_date = datetime.now().date()
     if not start_date:
         start_date = end_date - timedelta(days=180)
     
     logger.info(f"获取时间范围: {start_date} 到 {end_date}")
     
-    # 使用线程池执行 yfinance 下载操作
+    # 使用线程池执行 yfinance 下载操作，end_date+1天才能获取到最后一天
     loop = asyncio.get_event_loop()
-    df = await loop.run_in_executor(None, partial(yf.download, symbol, start=start_date, end=end_date))
+    df = await loop.run_in_executor(None, partial(yf.download, symbol, start=start_date, end=end_date + timedelta(days=1)))
     
     if df.empty:
         logger.warning(f"未找到股票 {symbol} 的数据")
