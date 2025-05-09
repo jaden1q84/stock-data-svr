@@ -34,7 +34,8 @@ def get_stock_data(
             "high": r.high,
             "low": r.low,
             "close": r.close,
-            "volume": r.volume
+            "volume": r.volume,
+            "adj_close": r.adj_close
         }
         for r in q.all()
     ]
@@ -50,7 +51,8 @@ def get_latest_stock(symbol: str, db: Session = Depends(get_db)):
         "high": r.high,
         "low": r.low,
         "close": r.close,
-        "volume": r.volume
+        "volume": r.volume,
+        "adj_close": r.adj_close
     }
 
 @app.post("/stocks/{symbol}/fetch")

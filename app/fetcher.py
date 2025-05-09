@@ -56,7 +56,8 @@ async def fetch_and_store(symbol: str, db: Session, start_date=None, end_date=No
             high=float(row['High'].iloc[0]) if isinstance(row['High'], pd.Series) else float(row['High']),
             low=float(row['Low'].iloc[0]) if isinstance(row['Low'], pd.Series) else float(row['Low']),
             close=float(row['Close'].iloc[0]) if isinstance(row['Close'], pd.Series) else float(row['Close']),
-            volume=float(row['Volume'].iloc[0]) if isinstance(row['Volume'], pd.Series) else float(row['Volume'])
+            volume=float(row['Volume'].iloc[0]) if isinstance(row['Volume'], pd.Series) else float(row['Volume']),
+            adj_close=float(row.get('Adj Close', row['Close']).iloc[0]) if isinstance(row.get('Adj Close', row['Close']), pd.Series) else float(row.get('Adj Close', row['Close']))
         )
         db.add(record)
         count += 1
